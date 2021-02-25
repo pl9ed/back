@@ -2,7 +2,7 @@ package tubalubback.services;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -19,8 +19,8 @@ public class S3Service {
     public static final Region S3_REGION = Region.US_EAST_1;
     public static final String BUCKET_PATH = "uploads/";
 
-    private static final S3Client s3 = S3Client.builder().region(S3_REGION).credentialsProvider(ProfileCredentialsProvider.create()).build();
-    private static final S3Presigner presigner = S3Presigner.builder().region(S3_REGION).credentialsProvider(ProfileCredentialsProvider.create()).build();
+    private static final S3Client s3 = S3Client.builder().region(S3_REGION).credentialsProvider(DefaultCredentialsProvider.create()).build();
+    private static final S3Presigner presigner = S3Presigner.builder().region(S3_REGION).credentialsProvider(DefaultCredentialsProvider.create()).build();
 
     public boolean deleteObject(String objKey) {
         try {
