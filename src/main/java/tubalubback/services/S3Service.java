@@ -42,8 +42,7 @@ public class S3Service {
 
     public String presignPutUrl(String filename) {
         PresignedPutObjectRequest putReq = presigner.presignPutObject(r -> r.signatureDuration(Duration.ofMinutes(2))
-                .putObjectRequest(por ->
-                        por.bucket(BUCKET_NAME).key(BUCKET_PATH+filename).acl(ObjectCannedACL.PUBLIC_READ)));
+                .putObjectRequest(por -> por.bucket(BUCKET_NAME).key(BUCKET_PATH+filename)));
         //log.info("Presigned URL generated: {}", putReq.url().toString());
         return putReq.url().toString();
     }
