@@ -3,6 +3,7 @@ package tubalubback.services;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.http.SdkHttpResponse;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
@@ -22,22 +23,13 @@ public class S3Service {
     private static final S3Client s3 = S3Client.builder().region(S3_REGION).credentialsProvider(DefaultCredentialsProvider.create()).build();
     private static final S3Presigner presigner = S3Presigner.builder().region(S3_REGION).credentialsProvider(DefaultCredentialsProvider.create()).build();
 
-    public boolean deleteObject(String objKey) {
+    public DeleteObjectResponse deleteObject(String objKey) {
         try {
             DeleteObjectRequest req = DeleteObjectRequest.builder().bucket(BUCKET_NAME).key(BUCKET_PATH+objKey).build();
-            DeleteObjectResponse resp = s3.deleteObject(req);
-            if (resp.sdkHttpResponse().statusCode() / 100 == 2) {
-                return true;
-            }
+            return s3.deleteObject(req);
         } catch (S3Exception e) {
-            return false;
+            return null;
         }
-        return false;
-    }
-
-    public boolean deleteFromURL(String url) {
-        String filename = url.substring(url.lastIndexOf("/")+1);
-        return deleteObject(filename);
     }
 
     public String presignPutUrl(String filename) {
